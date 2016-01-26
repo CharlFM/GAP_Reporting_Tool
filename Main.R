@@ -150,8 +150,9 @@ mean(Year_Exp_Age$Ratio)
 
 # Checks
 
-Missed_Claim_Dat  #  Claims not matching with policy Info
-missed            #  Premium Data that did not merge with All_Data
+print("Only head printed")
+head(Missed_Claim_Dat)       #  Claims not matching with policy Info
+head(missed)                 #  Premium Data that did not merge with All_Data
 
 levels(as.factor(substr(missed$POLICYNUMBER,1,3))) # If levels are only MPW, then OK (or only GAP with MPW run)
 
