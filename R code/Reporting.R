@@ -2,7 +2,7 @@
 # Reporting Data #
 ##################
 
-Data_Out <- merge(merge(Data_Out, Ave_Claim_Sev, by.x = "IncYear_Month", by.y = "Year_Mon", all = TRUE), 
+Data_Out <- merge(merge(Data_Out, Ave_Claim_Sev, by.x = "IncYear_Month", by.y = "IncYear_Month", all = TRUE), 
                   Year_Exp_Age, by.x = "IncYear_Month", by.y = "Year_Month", all = TRUE)
 
 Data_Out$IncYear <- as.numeric(substr(Data_Out$IncYear_Month, 1, 4))
@@ -16,7 +16,7 @@ Data_Out$Ult[is.na(Data_Out$Ult)]  <-  0
 Data_Out$Profit                    <-  Data_Out$Core_Risk_Pr  -  Data_Out$Ult
 Data_Out$True_Risk_P               <-  Data_Out$Ult           /  (Data_Out$Total_Exposure)
 Data_Out$True_Risk_P_Rec           <-  Data_Out$Ult           /  (Data_Out$Total_Expo_Prem_Rec)
-Data_Out$Claim_Count               <-  Data_Out$Claim_Count   +   round(Data_Out$Ult / Data_Out$Ave_Claim_Sev)
+Data_Out$Claim_Count               <-  round(Data_Out$Ult     / Data_Out$Ave_Sev)
 Data_Out$Year                      <-  substr(Data_Out$IncYear_Month, 1, 4)
 
 Report_Data <- Data_Out %>%
