@@ -114,6 +114,13 @@ Claims_Dat <- All_cl_Data %>%
   summarise(claimtot = sum(CLAIM_PAYOUT_OK, na.rm = TRUE),
             OS_Claim = sum(CLAIM_PAYOUT_OS, na.rm = TRUE))
 
+Year_Month  <-  as.character(substr(seq(as.Date("2012-01-01"), by = "month", length.out = MaxDev - 12), 1, 7))
+YearsMonths <- data.frame(IncYear_Month = Year_Month, TempVar = seq(1,length(Year_Month)))
+
+Claims_Dat <- merge(Claims_Dat, YearsMonths, by = "IncYear_Month", all = TRUE)
+Claims_Dat <- Claims_Dat[order(Claims_Dat$TempVar),]
+Claims_Dat <- subset(Claims_Dat, select = -TempVar)
+
 Claims_Dat$IBNR <- c(rep(0, nrow(Claims_Dat) - length(IBNR)), IBNR)
 
 Claims_Dat$claimtot[is.na(Claims_Dat$claimtot)] <- 0
@@ -121,7 +128,7 @@ Claims_Dat$OS_Claim[is.na(Claims_Dat$OS_Claim)] <- 0
 
 Claims_Dat$Ult <- Claims_Dat$claimtot + Claims_Dat$IBNR + Claims_Dat$OS_Claim
 
-rm(IBNR, MaxDev)
+rm(IBNR, MaxDev, Year_Month, YearsMonths)
 
 
 
