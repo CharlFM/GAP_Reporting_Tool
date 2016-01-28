@@ -68,6 +68,7 @@ All_cl_Data <- All_cl_Data %>% select(CLAIM_IDENTIFIER, POLICY_HOLDER_ID, EXTERN
                                       LOCATION_CODE, LOCATION_NAME, PRODUCT_NAME, MEDICAL_SCHEME, 
                                       CLAIM_INCIDENT_DATE, CLAIM_DATE_OF_PAYMENT, CLAIM_PAYOUT,
                                       POLICY_HOLDER_DOB, PATIENT_DOB)
+
 # Fix data format that is imposed by the excelToCsv function.
 All_cl_Data <- data.frame(gsub(".0000000", "", as.matrix(All_cl_Data)))
 All_cl_Data$CLAIM_PAYOUT <- as.numeric(as.character(All_cl_Data$CLAIM_PAYOUT))
