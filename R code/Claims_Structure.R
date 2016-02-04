@@ -66,8 +66,8 @@ for (i in 13:Max_Inc_Month){
   New_AD$tempexp[New_AD$DATEEND <= Date | New_AD$COMMENCEDATE > Date]  <-  NA
   
   # Find ages
-  agecalc                                <- (as.numeric(Date - New_AD$DATEBORN[!is.na(New_AD$tempexp)])) / 365.25 
-  New_AD$tempage[!is.na(New_AD$tempexp)] <- ifelse(is.null(agecalc), NA, agecalc)
+  New_AD$tempage                        <- (as.numeric(Date - New_AD$DATEBORN)) / 365.25 
+  New_AD$tempage[is.na(New_AD$tempexp)] <- NA
   
   colnames(New_AD)[colnames(New_AD) == "tempage"] <- paste0("age_at",      months[i - 12])
   colnames(New_AD)[colnames(New_AD) == "tempexp"] <- paste0("exposure_at", months[i - 12])
@@ -78,7 +78,7 @@ for (i in 13:Max_Inc_Month){
 New_AD  <- merge(New_AD, Temp_DF2, by.x = "POLICYNO", by.y = "Key", all = T)
 All_Dat <- New_AD
 
-rm(i, j, Max_Inc_Month, months, Date, Work, Temp_DF, Temp_DF2, New_AD, agecalc)
+rm(i, j, Max_Inc_Month, months, Date, Work, Temp_DF, Temp_DF2, New_AD)
 
 
 

@@ -118,11 +118,11 @@ source(paste(Path, "/R code/Data_Filter.R", sep = ""))
 Data_Out     <-  merge(Claims_Dat, PremsDat, by.x = "IncYear_Month", by.y = "Year_Mon", all = TRUE)
 Data_Out$LR  <-  (100 * Data_Out$Ult) / Data_Out$Core_Risk_Pr
 
-Data_Out$IncYear <- as.numeric(substr(Data_Out$IncYear_Month, 1,4))
-Data_Out$IncMont <- as.numeric(substr(Data_Out$IncYear_Month, 6,7))
-Data_Out <- Data_Out[with(Data_Out, order(IncYear,IncMont)), ]
+Data_Out$IncYear <- as.numeric(substr(Data_Out$IncYear_Month, 1, 4))
+Data_Out$IncMont <- as.numeric(substr(Data_Out$IncYear_Month, 6, 7))
+Data_Out <- Data_Out[with(Data_Out, order(IncYear, IncMont)), ]
 
-Data_Out <- Data_Out[ , -which(names(Data_Out) %in% c("IncYear","IncMont"))]
+Data_Out <- Data_Out[ , -which(names(Data_Out) %in% c("IncYear", "IncMont"))]
 
 #########################################################################################################
 # Get average Claim size per month #
@@ -148,7 +148,7 @@ source(paste(Path, "/R code/Forecasting.R", sep = ""))
 
 source(paste(Path, "/R code/Generating_Reports.R", sep = ""))
 
-Year_Exp_Age$Ratio <- Year_Exp_Age$Total_Expo_Prem_Rec/Year_Exp_Age$Total_Exposure
+Year_Exp_Age$Ratio <- Year_Exp_Age$Total_Expo_Prem_Rec / Year_Exp_Age$Total_Exposure
 Year_Exp_Age
 mean(Year_Exp_Age$Ratio)
 
@@ -158,7 +158,7 @@ print("Only head printed")
 head(Missed_Claim_Dat)       #  Claims not matching with policy Info
 head(missed)                 #  Premium Data that did not merge with All_Data
 
-levels(as.factor(substr(missed$POLICYNUMBER,1,3))) # If levels are only MPW, then OK (or only GAP with MPW run)
+levels(as.factor(substr(missed$POLICYNUMBER, 1, 3))) # If levels are only MPW, then OK (or only GAP with MPW run)
 
 # If needed - 
 source(paste(Path, "/R code/Frequency_To_Claim.R", sep = ""))

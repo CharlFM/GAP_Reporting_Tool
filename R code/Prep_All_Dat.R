@@ -188,10 +188,10 @@ All_Dat <- All_Dat[All_Dat$INDIVGRP               ==  "Ind",            ]   # In
 # Affinity #
 ############
 # MainAff <- c("DIRECTAXISSAPTYLTD", "BOOKINNRESERVATIONSERVICESPTYLTDTALOGICALL", "ZESTLIFEINVESTMENTSPTYLTD",
-#               "ZWING", "LEADSOURCE", "GUARDRISKINSURANCECOMPANYLTD",    "HIPPOINSURANCE","THINKMONEY", "ZESTWEB",
+#              "ZWING", "LEADSOURCE", "GUARDRISKINSURANCECOMPANYLTD", "HIPPOINSURANCE","THINKMONEY", "ZESTWEB",
 #              "VANBREDA","GEMSNAB","MEDICALERT")
-# All_Dat <- All_Dat[(All_Dat$AFFGRPNAME %in% MainAff[11]), ]
-                                                     
+# All_Dat <- All_Dat[!(All_Dat$AFFGRPNAME %in% MainAff), ]
+
 ###################
 
 # All_Dat <- filter(All_Dat, grepl("LIBERTYHEALTH", AFFGRPNAME)) 
