@@ -57,8 +57,8 @@ All_cl_Data <- All_cl_Data[All_cl_Data$EXTERNAL_POLICY_REFERENCE %in% All_Dat$PO
 rm(testr, temptestr, matched_dat, Add_Back, missed_dat)
 
 # Do some calculations
-All_cl_Data$POLICY_HOLDER_NAME  <-  toupper(All_cl_Data$POLICY_HOLDER_NAME)
-All_cl_Data$Title               <-  word(All_cl_Data$POLICY_HOLDER_NAME, -1)
+All_cl_Data$POLICY_HOLDER_NAME      <-  toupper(All_cl_Data$POLICY_HOLDER_NAME)
+All_cl_Data$Title                   <-  word(All_cl_Data$POLICY_HOLDER_NAME, -1)
 
 All_cl_Data$Age_Join                <-  as.numeric((All_cl_Data$COMMENCEDATE        - All_cl_Data$POLICY_HOLDER_DOB) / 365.25)
 All_cl_Data$Age_Claim               <-  as.numeric((All_cl_Data$CLAIM_INCIDENT_DATE - All_cl_Data$POLICY_HOLDER_DOB) / 365.25)
@@ -78,17 +78,11 @@ All_cl_Data$Overall_Incident_Month  <-  All_cl_Data$Incident_Month + 12 * (All_c
 
 All_cl_Data$IncYear_Month           <-  as.factor(substr(All_cl_Data$CLAIM_INCIDENT_DATE, 1, 7))
 
-All_cl_Data$CLAIM_PAYOUT_OK <- 0
-All_cl_Data$CLAIM_PAYOUT_OS <- 0
+All_cl_Data$CLAIM_PAYOUT_OK         <- 0
+All_cl_Data$CLAIM_PAYOUT_OS         <- 0
 
 All_cl_Data$CLAIM_PAYOUT_OK[!is.na(All_cl_Data$CLAIM_DATE_OF_PAYMENT)]  <-  All_cl_Data$CLAIM_PAYOUT[!is.na(All_cl_Data$CLAIM_DATE_OF_PAYMENT)]
 All_cl_Data$CLAIM_PAYOUT_OS[ is.na(All_cl_Data$CLAIM_DATE_OF_PAYMENT)]  <-  All_cl_Data$CLAIM_PAYOUT[is.na(All_cl_Data$CLAIM_DATE_OF_PAYMENT)]
-
-
-
-
-
-
 
 
 

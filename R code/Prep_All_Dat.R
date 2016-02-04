@@ -149,7 +149,7 @@ rm(testr)
 
 All_Dat <- All_Dat[All_Dat$PRODCODE               ==  "GAP",            ]
 All_Dat <- All_Dat[All_Dat$AFFGRPNAME             !=  "LIBERTYHEALTH",  ]   # ! = Non Lib or ; no ! = Lib
-# All_Dat <- All_Dat[All_Dat$INDIVGRP               ==  "Ind",            ]   # Ind vs Grp
+All_Dat <- All_Dat[All_Dat$INDIVGRP               ==  "Ind",            ]   # Ind vs Grp
 # All_Dat <- All_Dat[All_Dat$VOLUNTARYCOMPULSORY    ==  "C",              ]   # C vs V
 # All_Dat <- All_Dat[All_Dat$CLIENTGENDER           ==  "F",              ]   # M vs F
 # All_Dat <- All_Dat[All_Dat$Freq                   >  1,                 ]   # 1 2 3 4 NA

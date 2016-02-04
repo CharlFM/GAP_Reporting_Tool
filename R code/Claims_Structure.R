@@ -11,7 +11,7 @@ All_cl_Data$Counter[All_cl_Data$CLAIM_PAYOUT != 0]       <- 1
 
 New_AD <- data.frame()
 New_AD <- All_Dat
-
+# Add Comment
 # Filter data to only work with summarised claim data per individual policy (grouping them together)
 Work <- data.frame()
 Work <- All_cl_Data %>% 

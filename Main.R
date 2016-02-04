@@ -38,6 +38,10 @@
 # Input Variables #
 ###################
 
+# Clears Memory
+rm(list = ls())
+gc()
+
 DateEnd <- as.Date("2015/12/31")
 
 # Notes - 1) Add input files to folders.
@@ -156,6 +160,7 @@ head(missed)                 #  Premium Data that did not merge with All_Data
 
 levels(as.factor(substr(missed$POLICYNUMBER,1,3))) # If levels are only MPW, then OK (or only GAP with MPW run)
 
-
+# If needed - 
+source(paste(Path, "/R code/Frequency_To_Claim.R", sep = ""))
 
 
