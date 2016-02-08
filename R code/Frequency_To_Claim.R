@@ -7,8 +7,8 @@ Tot_Duration[!is.na(All_Dat$DATEEND)] <- as.numeric(All_Dat$DATEEND[!is.na(All_D
 
 Tot_Duration <- Tot_Duration[Tot_Duration > 0]
 
-Time_To_Claims_Bins <- data.frame(table(as.numeric(cut(Time_to_Claim, seq(1, ceiling(max(c(Tot_Duration, Time_to_Claim))))))))
-Duration_Bins       <- data.frame(table(as.numeric(cut(Tot_Duration,  seq(1, ceiling(max(c(Tot_Duration, Time_to_Claim))))))))
+Time_To_Claims_Bins <- data.frame(table(as.numeric(cut(Time_to_Claim, seq(1, ceiling(max(c(Tot_Duration, Time_to_Claim), na.rm = T)))))))
+Duration_Bins       <- data.frame(table(as.numeric(cut(Tot_Duration,  seq(1, ceiling(max(c(Tot_Duration, Time_to_Claim), na.rm = T)))))))
 
 Combo <- merge(Duration_Bins, Time_To_Claims_Bins, by = "Var1", all = T)
 
@@ -23,6 +23,11 @@ tot <- seq(1:nrow(Combo))
 loFreq <- loess(Combo$Freq ~ tot)
 Combo$Freq <- loFreq$fitted
 
-ggplot(Combo, aes(Var1, Freq)) + geom_point()
+myPlot <- ggplot(Combo, aes(Var1, Freq)) + geom_point()
+
+ggsave(filename = paste(Path, "/Results/", TodayDate, "/", Time, "/", "Claim_Freq_T2Claim.jpg",  sep = ""), plot = myPlot)
+
+
+
 
 
