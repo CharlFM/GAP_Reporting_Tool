@@ -51,7 +51,7 @@ All_Dat_I <- data.frame(gsub(".0000000", "", as.matrix(All_Dat_I)))
 All_Dat_I$VOLUNTARYCOMPULSORY     <-   "V"
 All_Dat_I$POLICYHOLDERCLIENTCODE  <-   ""
 All_Dat_I$COMPANYNAME             <-   ""
-All_Dat_I$INDIVGRP                <-   "Ind"
+All_Dat_I$INDIVGRP                <-   "IND"
 
 # Fix Dates
 All_Dat_I$COMMENCEDATE   <-   DateConv(All_Dat_I$COMMENCEDATE)
@@ -74,7 +74,7 @@ All_Dat_G <- All_Dat_G %>% select(IDNUMBER, NONSAIDIND, COMMENCEDATE, AFFGRPNAME
 # Fix data format that is imposed by the excelToCsv function.
 All_Dat_G <- data.frame(gsub(".0000000", "", as.matrix(All_Dat_G)))
 
-All_Dat_G$INDIVGRP      <-  "Grp"
+All_Dat_G$INDIVGRP      <-  "GRP"
 
 # Fix Dates
 All_Dat_G$COMMENCEDATE  <-  DateConv(All_Dat_G$COMMENCEDATE)
@@ -131,70 +131,51 @@ All_Dat$ID[nchar(All_Dat$IDNUMBER) == 10 & substr(All_Dat$DATEBORN, 3, 6) == "00
 # Tag people who left and joined again later (exlcuding people who moved from IND to GRP and vice versa)
 All_Dat$TempKey <- paste(All_Dat$ID, All_Dat$PRODCODE,sep = "")
 
-testr <- All_Dat[All_Dat$INDIVGRP == "Ind",]
+testr <- All_Dat[All_Dat$INDIVGRP == "IND",]
 testr <- as.data.frame(table(testr$TempKey))
 
 testr$Var1 <- as.character(testr$Var1)
 
 All_Dat <- merge(All_Dat, testr, by.x = "TempKey", by.y = "Var1", all.x = TRUE)
 
-All_Dat$Freq[All_Dat$INDIVGRP == "Grp" | All_Dat$ID == ""] <-  NA
+All_Dat$Freq[All_Dat$INDIVGRP == "GRP" | All_Dat$ID == ""] <-  NA
 All_Dat                                                    <-  subset(All_Dat, select = -TempKey)
 
 rm(testr)
 
-################################################################################################################################## 
-############# APPLY FILTER HERE ################# EG -> All_Dat <- filter(All_Dat, grepl("ZWING", AFFGRPNAME))
+
+# Get age categories
+All_Dat$Age_Comm <- as.numeric(All_Dat$COMMENCEDATE - All_Dat$DATEBORN)/365.25
+All_Dat$Age_Comm <- as.character(cut(All_Dat$Age_Comm, Age_Classes))
+
+##################################################################################################################################
+############# APPLY FILTER HERE ##################################################################################################
 ##################################################################################################################################
 
-All_Dat <- All_Dat[All_Dat$PRODCODE               ==  "GAP",            ]
-All_Dat <- All_Dat[All_Dat$AFFGRPNAME             !=  "LIBERTYHEALTH",  ]   # ! = Non Lib or ; no ! = Lib
-All_Dat <- All_Dat[All_Dat$INDIVGRP               ==  "Ind",            ]   # Ind vs Grp
-# All_Dat <- All_Dat[All_Dat$VOLUNTARYCOMPULSORY    ==  "C",              ]   # C vs V
-# All_Dat <- All_Dat[All_Dat$CLIENTGENDER           ==  "F",              ]   # M vs F
-# All_Dat <- All_Dat[All_Dat$Freq                   >  1,                 ]   # 1 2 3 4 NA
-# All_Dat <- All_Dat[All_Dat$POLICYSTATUS           == "LAP",             ]   # "ACT" "CAN" "LAP" ("NTU" "DEC" "PRE" - not enough exposure)
 
-################
-# Age Classess #
-################
+if (Age_Fliter != "") {All_Dat <- All_Dat[All_Dat$Age_Comm == Age_Fliter, ] }
+if (Product    != "") {All_Dat <- All_Dat[All_Dat$PRODCODE == Product, ]}
 
-# All_Dat$Age_Comm <- as.numeric(All_Dat$COMMENCEDATE - All_Dat$DATEBORN)/365.25
-# All_Dat$Age_Comm <- as.character(cut(All_Dat$Age_Comm, c(0,30,40,50,60,70,80,150)))
+if (Affinity != "") {
+  if (Everything_Else == "YES") {
+    All_Dat <- All_Dat[!(All_Dat$AFFGRPNAME %in% Affinity), ]
+  } else {
+    All_Dat <- All_Dat[All_Dat$AFFGRPNAME %in% Affinity, ]
+  }
+}
 
-# All_Dat <- All_Dat[All_Dat$Age_Comm == "(80,150]", ] # "(0,30]"  "(30,40]"  "(40,50]"  "(50,60]"  "(60,70]"  "(70,80]"  "(80,150]"
+if (Indiv_Group    != "") {All_Dat <- All_Dat[All_Dat$INDIVGRP             ==  Indiv_Group, ]}
+if (Vol_Comp       != "") {All_Dat <- All_Dat[All_Dat$VOLUNTARYCOMPULSORY  ==  Vol_Comp, ]}
+if (Gender         != "") {All_Dat <- All_Dat[All_Dat$CLIENTGENDER         ==  Gender, ]}
+if (max(Rejoiners) >  0 ) {All_Dat <- All_Dat[All_Dat$Freq %in% Rejoiners, ]}
 
-# All_Dat$Age_Comm <- as.numeric(All_Dat$COMMENCEDATE - All_Dat$DATEBORN)/365.25
-# All_Dat$Age_Comm <- as.character(cut(All_Dat$Age_Comm, c(0,60,150)))
-
-# All_Dat <- All_Dat[All_Dat$Age_Comm == "(0,60]", ] # "(0,60]"  "(60,150]"
-
-################
-
-###################
-# Policy Duration #
-###################
-
-# All_Dat$Pol_Dur                         <- as.numeric(All_Dat$DATEEND - All_Dat$COMMENCEDATE)                    / 30.4375
-# All_Dat$Pol_Dur[is.na(All_Dat$Pol_Dur)] <- as.numeric(Sys.Date() - All_Dat$COMMENCEDATE[is.na(All_Dat$Pol_Dur)]) / 30.4375
-# All_Dat$Pol_Dur <- as.character(cut(All_Dat$Pol_Dur, c(-5,6,9,12,15,18,24,30,36,42,48,54,100)))
-
-# All_Dat <- All_Dat[All_Dat$Pol_Dur == "(54,100]", ] # "(-5,6]"  "(6,9]"  "(9,12]"  "(12,15]"  "(15,18]" "(18,24]"  
-#                                                   "(24,30]"  "(30,36]"  "(36,42]" "(42,48]" "(48,54]" "(54,100]"
-
-###################
-
-############
-# Affinity #
-############
-# MainAff <- c("DIRECTAXISSAPTYLTD", "BOOKINNRESERVATIONSERVICESPTYLTDTALOGICALL", "ZESTLIFEINVESTMENTSPTYLTD",
-#              "ZWING", "LEADSOURCE", "GUARDRISKINSURANCECOMPANYLTD", "HIPPOINSURANCE","THINKMONEY", "ZESTWEB",
-#              "VANBREDA","GEMSNAB","MEDICALERT")
-# All_Dat <- All_Dat[!(All_Dat$AFFGRPNAME %in% MainAff), ]
-
-###################
-
-# All_Dat <- filter(All_Dat, grepl("LIBERTYHEALTH", AFFGRPNAME)) 
+if (Status != "") {
+  if (Everything_Else == "YES") {
+    All_Dat <- All_Dat[All_Dat$AFFGRPNAME %in% Status, ]
+  } else {
+    All_Dat <- All_Dat[!(All_Dat$AFFGRPNAME %in% Status), ]
+  }
+}
 
 ##################################################################################################################################
 ##################################################################################################################################
@@ -239,7 +220,7 @@ cent <- ifelse(substr(All_Dat$IDNUMBER, 1, 2) < as.numeric(substr(format(Sys.Dat
                as.numeric(substr(format(Sys.Date(), "%Y"), 1, 2)) - 1)
 
 Temp_DB <- All_Dat$IDNUMBER
-Temp_DB[Temp_DB == ""] <- "1111111111111"
+Temp_DB[Temp_DB == ""]        <- "1111111111111"
 Temp_DB[nchar(Temp_DB) != 13] <- "1111111111111"
 Temp_DB <- as.Date(paste(cent, substr(Temp_DB, 1, 2), "-", 
                                               substr(Temp_DB, 3, 4), "-", 

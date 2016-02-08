@@ -38,18 +38,50 @@
 # Input Variables #
 ###################
 
-# Clears Memory
-rm(list = ls())
-gc()
-
-DateEnd <- as.Date("2015/12/31")
-
 # Notes - 1) Add input files to folders.
 #         2) Make sure file names are consistent with current file names
 #         3) Make sure that the input files have only 1 sheet each
 #         4) With the Claims data from GR, first double click on the pivot table summary to access the data in the background
 #            be sure to double click on the Total value of claims paid (this will access all data). Then copy the data into a
 #            new sheet (copy paste values) and then remove all other sheets except the new sheet.
+
+# Clears Memory
+rm(list = ls())
+gc()
+
+DateEnd <- as.Date("2015/12/31")
+
+##################
+# Select Filters #
+##################
+
+Product <- "GAP" # Choices : "" (blank) <- All products i.e. NO FILTER
+#                            "MPW"      <- MPW products ONLY
+#                            "GAP"      <- GAP products ONLY 
+
+MainAff <- c("LIBERTYHEALTH", "DIRECTAXISSAPTYLTD", "BOOKINNRESERVATIONSERVICESPTYLTDTALOGICALL", "ZESTLIFEINVESTMENTSPTYLTD",
+              "ZWING", "LEADSOURCE", "GUARDRISKINSURANCECOMPANYLTD", "HIPPOINSURANCE", "THINKMONEY", "ZESTWEB",
+              "VANBREDA", "GEMSNAB", "MEDICALERT")
+Affinity <- MainAff[5]  # Choices : MainAff[1], MainAff[2] or MainAff[3]... (add others that the user would want in MainAff) 
+#                                         "" (blank) <- NO FILTER
+# NB -> to select multiple affinities : replace the choice with c(MainAff[1], MainAff[2], MainAff[4]...)
+Everything_Else <- "NO" # Choices : "YES", "NO
+# To select everything except the selected affinity (i.e. if you want everything except LIB (i.e NON LIB), switch Everything_Else to Yes)
+Indiv_Group <- "IND" # Choices : "" (blank) <- NO FILTER
+#                                IND        <- Individual ONLY
+#                                GRP        <- Group ONLY
+Vol_Comp <- "" # Choices : "" (blank) <- NO FILTER
+#                          "V"        <- Voluntary ONLY
+#                          "C"        <- Compulsory ONLY
+Gender <- "" # Choices : "", "M", "F"
+
+Rejoiners <- 0 # Choices : 0 -> NO FILTER or 1, 2, 3, 4...
+# For multiple choices -> c(1, 2, 3...)
+
+Status <- "" # Choices : "ACT" "CAN" "LAP" "NTU" "DEC" "PRE" (use c(...) to combine multiple statusses)
+
+Age_Classes <- c(0, 60, 999) # Add more classes if needed - i.e change to c(0, 30, 60, 999), ignore if no filter needed - do not set to ""
+Age_Fliter  <- ""      # Choice depends on number of classes. Set to "" for NO FILTER 
 
 #########################################################################################################
 # Set-up #
@@ -64,7 +96,7 @@ source(paste(Path, "/R code/Initialize.R", sep = ""))
 ###################
 
 # Call all data prep file
-source(paste(Path, "/R code/Prep_All_Dat.R", sep = "")) # Filter to be applied inside here 
+source(paste(Path, "/R code/Prep_All_Dat.R", sep = "")) 
 
 # Combine Claim files and cleans data
 source(paste(Path, "/R code/Prep_Claim_Data.R", sep = ""))
@@ -155,12 +187,12 @@ mean(Year_Exp_Age$Ratio)
 # Checks
 
 print("Only head printed")
-head(Missed_Claim_Dat)       #  Claims not matching with policy Info
-head(missed)                 #  Premium Data that did not merge with All_Data
+head(Missed_Claim_Dat[, 1:3], 2)       #  Claims not matching with policy Info
+head(missed[, 1:3], 2)                 #  Premium Data that did not merge with All_Data
 
 levels(as.factor(substr(missed$POLICYNUMBER, 1, 3))) # If levels are only MPW, then OK (or only GAP with MPW run)
 
 # If needed - 
 source(paste(Path, "/R code/Frequency_To_Claim.R", sep = ""))
-
-
+ggplot(Combo, aes(Var1, Freq)) + geom_point()
+as.numeric(Combo$Var1[Combo$Freq == max(Combo$Freq)])
