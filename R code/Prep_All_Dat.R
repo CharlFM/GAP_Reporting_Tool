@@ -193,7 +193,7 @@ Checks <- data.frame(Policy_ID  =  All_Dat$POLICYNO,
                      ID_Length  =  integer(len), 
                      ID_Gender  =  character(len), 
                      ID_DOB     =  numeric(len))
-
+# Comment here
 Checks$Policy_ID  <-  as.character(Checks$Policy_ID)
 Checks$Gender     <-  as.character(Checks$Gender)
 Checks$ID         <-  as.character(Checks$ID)
