@@ -59,11 +59,11 @@ Product <- "GAP" # Choices : "" (blank) <- All products i.e. NO FILTER
 #                            "MPW"      <- MPW products ONLY
 #                            "GAP"      <- GAP products ONLY 
 
-MainAff <- c("LIBERTYHEALTH", "DIRECTAXISSAPTYLTD", "BOOKINNRESERVATIONSERVICESPTYLTDTALOGICALL", "ZESTLIFEINVESTMENTSPTYLTD",
+MainAff <- c("", "LIBERTYHEALTH", "DIRECTAXISSAPTYLTD", "BOOKINNRESERVATIONSERVICESPTYLTDTALOGICALL", "ZESTLIFEINVESTMENTSPTYLTD",
               "ZWING", "LEADSOURCE", "GUARDRISKINSURANCECOMPANYLTD", "HIPPOINSURANCE", "THINKMONEY", "ZESTWEB",
               "VANBREDA", "GEMSNAB", "MEDICALERT")
-Affinity <- MainAff[5]  # Choices : MainAff[1], MainAff[2] or MainAff[3]... (add others that the user would want in MainAff) 
-#                                         "" (blank) <- NO FILTER
+Affinity <- MainAff[1]  # Choices : MainAff[1], MainAff[2] or MainAff[3]... (add others that the user would want in MainAff) 
+#                                   MainAff[1] <- NO FILTER
 # NB -> to select multiple affinities : replace the choice with c(MainAff[1], MainAff[2], MainAff[4]...)
 Everything_Else <- "NO" # Choices : "YES", "NO
 # To select everything except the selected affinity (i.e. if you want everything except LIB (i.e NON LIB), switch Everything_Else to Yes)
