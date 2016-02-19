@@ -53,7 +53,7 @@ All_cl_Data$PRODUCT_DESCRIPTION         <-  gsub(" ", "", gsub("[^[:alnum:] ]", 
 All_cl_Data$CLAIM_APPROVAL_STATUS_CODE  <-  gsub(" ", "", gsub("[^[:alnum:] ]", "", toupper(All_cl_Data$CLAIM_APPROVAL_STATUS_CODE)))
 All_cl_Data$EXTERNAL_POLICY_REFERENCE   <-  gsub(" ", "", gsub("[^[:alnum:] ]", "", toupper(All_cl_Data$EXTERNAL_POLICY_REFERENCE)))
 
-All_cl_Data$CLAIM_PAYOUT <- as.numeric(All_cl_Data$CLAIM_PAYOUT) 
+All_cl_Data$CLAIM_PAYOUT <- as.numeric(as.character(All_cl_Data$CLAIM_PAYOUT))
 All_cl_Data <- All_cl_Data[with(All_cl_Data, order(-CLAIM_PAYOUT)), ]
 All_cl_Data <- All_cl_Data[!duplicated(All_cl_Data$CLAIM_IDENTIFIER), ]
 All_cl_Data <- All_cl_Data %>% 
@@ -67,7 +67,9 @@ All_cl_Data <- All_cl_Data %>% select(CLAIM_IDENTIFIER, POLICY_HOLDER_ID, EXTERN
                                       POLICY_HOLDER_NAME, INCIDENT_CAUSE_CODE, INCIDENT_CAUSE_DESCRIPTION,
                                       LOCATION_CODE, LOCATION_NAME, PRODUCT_NAME, MEDICAL_SCHEME, 
                                       CLAIM_INCIDENT_DATE, CLAIM_DATE_OF_PAYMENT, CLAIM_PAYOUT,
-                                      POLICY_HOLDER_DOB, PATIENT_DOB)
+                                      POLICY_HOLDER_DOB, PATIENT_DOB, 
+                                      SERVICE_CODE, SERVICE_DESCRIPTION,
+                                      SERV_PAID, CMS_MED_AID_VALUE, SERV_PROVIDER_CHARGE)
 
 # Fix data format that is imposed by the excelToCsv function.
 All_cl_Data <- data.frame(gsub(".0000000", "", as.matrix(All_cl_Data)))
@@ -83,7 +85,9 @@ All_cl_Data$PATIENT_DOB            <-  DateConv(All_cl_Data$PATIENT_DOB)
 All_cl_Data$POLICY_HOLDER_ID  <-  gsub(" ", "", All_cl_Data$POLICY_HOLDER_ID)
 All_cl_Data$POLICY_HOLDER_ID  <-  substr(All_cl_Data$POLICY_HOLDER_ID, 4, nchar(All_cl_Data$POLICY_HOLDER_ID))
 
-
+# Fix Values
+All_cl_Data$SERV_PAID             <-  as.numeric(as.character(All_cl_Data$SERV_PAID))
+All_cl_Data$SERV_PROVIDER_CHARGE  <-  as.numeric(as.character(All_cl_Data$SERV_PROVIDER_CHARGE))
 
 
 
